@@ -1,0 +1,80 @@
+/* Basic styling for the form container */
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f4f4f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  /* Styling for the form */
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Label styling */
+  label {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+  
+  /* Group for the radio buttons */
+  div {
+    margin-bottom: 20px;
+  }
+  
+  /* Styling for radio buttons */
+  input[type="radio"] {
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+  
+  /* Score container styling */
+  .score-container {
+    background-color: #28a745;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  /* Styling for form sections (questions) */
+  input[type="radio"] {
+    cursor: pointer;
+  }
+  
+  input[type="radio"]:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* Button or additional styling (if needed in future) */
+  button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  /* Hover effect for button */
+  button:hover {
+    background-color: #0056b3;
+  }
+  

@@ -1,0 +1,102 @@
+/* Register.css */
+
+/* Styling for the entire page */
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Styling for the modal box */
+  .register-modal {
+    background-color: grey;
+    padding: 20px;
+    border-radius: 8px;
+    text-align:left;
+    width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Title of the register page */
+  .register-modal h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+  
+  /* Styling for form elements */
+  .register-modal form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    display: block;
+    font-size: 24px;
+    margin-bottom: 5px;
+    color: #333; /* Dark gray for label text */
+  }
+  
+  /* Input field styling */
+  .register-modal input {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color:black;
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+  }
+  
+  /* Focus effect on input fields */
+  .register-modal input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+  }
+  
+  /* Submit button styling */
+  .register-modal button {
+    width: 80px;  /* Fixed width */
+    padding: 10px;
+    background-color: black;
+    color: white;
+    margin-top:40px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    text-align: center;  /* Centers the text inside the button */
+    margin-left: 150px;   /* Automatically shifts the button to the right */
+    margin-right: auto;  
+  }
+  
+  /* Hover effect for the button */
+  .register-modal button:hover {
+    background-color: #2980b9;
+  }
+  
+  /* Styling for error messages */
+  .error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
+  /* Styling for the switch to login */
+  .switch-to-login {
+    margin-top: 20px;
+    font-size: 17px;
+  }
+  
+  .switch-to-login a {
+    color: black;
+    font-size:17px;
+    text-decoration: none;
+  }
+  
+  .switch-to-login a:hover {
+    text-decoration: underline;
+  }
+  
