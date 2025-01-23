@@ -20,9 +20,10 @@ from app1.views import LoginAPIView
 from app1.views import register_user
 from django.urls import path
 from app1.views import *
+from app1.views import GenerateReportAPIView
 
 
-
+patient_list = PatientViewSet.as_view({ 'post': 'create'})
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,6 +39,12 @@ urlpatterns = [
     path('api/EnvironmentalAssessment/', EnvironmentalAssessmentView.as_view(),name='EnvironmentalAssessmentView'),
     path('api/predict-risk/', get_risk_prediction, name='predict-risk'),
     path('api/diet-assessment/create/', DietAssessmentCreateView.as_view(), name='diet-assessment-create'),
+    path('api/questionnaire/submit/', QuestionnaireView.as_view(), name='submit-questionnaire'),
+    path('api/patients/create/', patient_list, name='patient-create'),
+    path('api/report/<int:patient_id>/',GenerateReportAPIView.as_view(),name='report'),
+    path('download-report/<int:patient_id>/', download_report, name='download_report'),
+    path('api/contact/', submit_contact, name='submit_contact')
+
    
 ]
 from django.conf import settings

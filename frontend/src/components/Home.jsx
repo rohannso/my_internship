@@ -11,7 +11,8 @@ const Home = () => {
   };
 
   const handleCheckClick = () => {
-    navigate('/Form'); // Navigate to login page
+
+    navigate('/form'); // Navigate to login page
   };
 
 

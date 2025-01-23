@@ -114,6 +114,7 @@ DATABASES = {
 
 
 
+
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -159,6 +160,14 @@ MEDIA_ROOT = BASE_DIR / 'media'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-    ],
+        'rest_framework.authentication.SessionAuthentication',
+        
+    ]
 }
+import os
+# In settings.py
+REPORTS_DIR = os.path.join(BASE_DIR, 'reports')
+
+# Create reports directory if it doesn't exist
+if not os.path.exists(REPORTS_DIR):
+    os.makedirs(REPORTS_DIR)

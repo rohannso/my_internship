@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
 const RiskPredictionResults = () => {
-  // Existing states...
   const [predictionData, setPredictionData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -13,24 +11,46 @@ const RiskPredictionResults = () => {
   const [confidence, setConfidence] = useState(null);
   const [uploadLoading, setUploadLoading] = useState(false);
   const [uploadError, setUploadError] = useState('');
-  const navigate = useNavigate(); // Define navigate here
+  const navigate = useNavigate();
   
-  // New states for image processing results
   const [woodLampEffect, setWoodLampEffect] = useState(null);
   const [heatmap, setHeatmap] = useState(null);
   const [grayscaleImage, setGrayscaleImage] = useState(null);
   const [activeTab, setActiveTab] = useState('original');
+  const [authCredentials, setAuthCredentials] = useState(localStorage.getItem('authCredentials'));
+  const userId = localStorage.getItem('userId');
 
-  // Existing useEffect and fetchPredictionData remain the same...
   useEffect(() => {
+    if (!authCredentials) {
+      navigate('/login');
+      return;
+    }
     fetchPredictionData();
-  }, []);
-  
+  }, [authCredentials, navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('authCredentials');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('email');
+    navigate('/login');
+  };
+
+  const getAuthHeaders = () => ({
+    'Authorization': `Basic ${authCredentials}`,
+    'Content-Type': 'application/json',
+  });
 
   const fetchPredictionData = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/predict-risk/');
+      const response = await fetch('http://localhost:8000/api/predict-risk/', {
+        headers: getAuthHeaders()
+      });
+      
       if (!response.ok) {
+        if (response.status === 401) {
+          handleLogout();
+          return;
+        }
         throw new Error('Failed to fetch prediction data');
       }
       const data = await response.json();
@@ -40,9 +60,6 @@ const RiskPredictionResults = () => {
     } finally {
       setLoading(false);
     }
-  };
-  const handleGoToUserInputForm = () => {
-    navigate('/user-input-form'); // Navigates to the UserInputForm page
   };
 
   const handleFileChange = (e) => {
@@ -64,18 +81,33 @@ const RiskPredictionResults = () => {
       setUploadLoading(true);
       const uploadResponse = await fetch('http://127.0.0.1:8000/upload/', {
         method: 'POST',
+        headers: {
+          'Authorization': `Basic ${authCredentials}`
+        },
         body: formData,
       });
+      formData.append('user', userId);
 
       if (!uploadResponse.ok) {
+        if (uploadResponse.status === 401) {
+          handleLogout();
+          return;
+        }
         throw new Error('Upload failed');
       }
 
       const uploadData = await uploadResponse.json();
       setUploadedImage(uploadData.image);
 
-      const predictResponse = await fetch(`http://127.0.0.1:8000/predict/${uploadData.id}/`);
+      const predictResponse = await fetch(`http://127.0.0.1:8000/predict/${uploadData.id}/`, {
+        headers: getAuthHeaders()
+      });
+      
       if (!predictResponse.ok) {
+        if (predictResponse.status === 401) {
+          handleLogout();
+          return;
+        }
         throw new Error('Prediction failed');
       }
 
@@ -93,7 +125,6 @@ const RiskPredictionResults = () => {
     }
   };
 
-  // New component for image analysis tabs
   const ImageAnalysisTabs = () => {
     const tabStyle = (isActive) => ({
       padding: '10px 20px',
@@ -108,35 +139,22 @@ const RiskPredictionResults = () => {
 
     return (
       <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
-        <button
-          style={tabStyle(activeTab === 'original')}
-          onClick={() => setActiveTab('original')}
-        >
+        <button style={tabStyle(activeTab === 'original')} onClick={() => setActiveTab('original')}>
           Original
         </button>
-        <button
-          style={tabStyle(activeTab === 'woodlamp')}
-          onClick={() => setActiveTab('woodlamp')}
-        >
+        <button style={tabStyle(activeTab === 'woodlamp')} onClick={() => setActiveTab('woodlamp')}>
           Wood's Lamp
         </button>
-        <button
-          style={tabStyle(activeTab === 'heatmap')}
-          onClick={() => setActiveTab('heatmap')}
-        >
+        <button style={tabStyle(activeTab === 'heatmap')} onClick={() => setActiveTab('heatmap')}>
           Heatmap
         </button>
-        <button
-          style={tabStyle(activeTab === 'grayscale')}
-          onClick={() => setActiveTab('grayscale')}
-        >
+        <button style={tabStyle(activeTab === 'grayscale')} onClick={() => setActiveTab('grayscale')}>
           Grayscale
         </button>
       </div>
     );
   };
 
-  // New component for displaying the current image view
   const ImageView = () => {
     let currentImage = null;
     let title = '';
@@ -174,6 +192,7 @@ const RiskPredictionResults = () => {
             borderRadius: '8px',
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
           }}
+          crossOrigin="anonymous"
         />
       </div>
     ) : null;
@@ -181,7 +200,24 @@ const RiskPredictionResults = () => {
 
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
-      {/* Risk Prediction Section - Keeping existing code... */}
+      {/* Logout Button */}
+      <div style={{ textAlign: 'right', marginBottom: '20px' }}>
+        <button 
+          onClick={handleLogout}
+          style={{
+            backgroundColor: '#dc3545',
+            color: 'white',
+            padding: '8px 16px',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer'
+          }}
+        >
+          Logout
+        </button>
+      </div>
+
+      {/* Risk Prediction Section */}
       <div style={{ marginBottom: '40px' }}>
         <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>
           Vitiligo Risk Assessment Results
@@ -206,7 +242,6 @@ const RiskPredictionResults = () => {
         )}
 
         {!loading && !error && predictionData && (
-          // ... Existing risk prediction results JSX
           <div>
             {/* Individual Scores */}
             <div style={{ 
@@ -269,7 +304,7 @@ const RiskPredictionResults = () => {
         )}
       </div>
 
-      {/* Enhanced Image Upload Section */}
+      {/* Image Upload Section */}
       <div style={{ marginTop: '40px' }}>
         <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>
           Vitiligo Image Detection
@@ -323,22 +358,18 @@ const RiskPredictionResults = () => {
           )}
         </div>
 
-        {/* Enhanced Image Analysis Results */}
+        {/* Image Analysis Results */}
         {uploadedImage && (
           <div style={{ 
             border: '1px solid #ccc', 
             padding: '20px', 
             borderRadius: '8px' 
           }}>
-            {/* Image Analysis Tabs */}
             <ImageAnalysisTabs />
-
-            {/* Image View */}
             <div style={{ marginBottom: '20px' }}>
               <ImageView />
             </div>
 
-            {/* Detection Results */}
             {imagePrediction && (
               <div style={{ marginTop: '20px' }}>
                 <h3 style={{ marginBottom: '15px' }}>Detection Results</h3>
@@ -356,25 +387,33 @@ const RiskPredictionResults = () => {
                 </div>
               </div>
             )}
-          <button
-            onClick={() => {
-              // Navigate to the User Input Form
-              navigate('/user-input-form', { state: { imagePrediction, confidence, woodLampEffect, heatmap, grayscaleImage } });
-            }}
-            style={{
-              backgroundColor: '#007bff',
-              color: 'white',
-              padding: '12px 30px',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '16px',
-              fontWeight: 'bold',
-              marginTop: '20px'
-            }}
-          >
-            Generate Report
-          </button>
+
+            <button
+              onClick={() => {
+                navigate('/user-input-form', { 
+                  state: { 
+                    imagePrediction, 
+                    confidence, 
+                    woodLampEffect, 
+                    heatmap, 
+                    grayscaleImage 
+                  } 
+                });
+              }}
+              style={{
+                backgroundColor: '#007bff',
+                color: 'white',
+                padding: '12px 30px',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                marginTop: '20px'
+              }}
+            >
+              Generate Report
+            </button>
           </div>
         )}
       </div>

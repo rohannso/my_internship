@@ -7,7 +7,7 @@ from .models import LifestyleAssessment
 from .models import PsychologicalAssessment
 from .models import VitiligoAssessment
 from .models import  EnvironmentalAssessment
-from .models import DietAssessment
+from .models import *
 admin.site.register(UploadedImage)
 
 admin.site.register(FamilyHistory)
@@ -16,3 +16,6 @@ admin.site.register(PsychologicalAssessment)
 admin.site.register(VitiligoAssessment)
 admin.site.register(EnvironmentalAssessment)
 admin.site.register(DietAssessment)
+admin.site.register(VitiligoQuestionnaire)
+admin.site.register(Patient)
+admin.site.register(ContactSubmission)

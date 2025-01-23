@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Form5.css';
 
@@ -12,6 +12,13 @@ const Form5 = () => {
   const [totalScore, setTotalScore] = useState(0);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const navigate = useNavigate();
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      navigate('/login', { state: { returnUrl: '/form5' } });
+    }
+  }, [navigate]);
+  const userId = localStorage.getItem("userId");
 
   const handleScoreChange = (event) => {
     const { name, value } = event.target;
@@ -47,6 +54,7 @@ const Form5 = () => {
         body: JSON.stringify({
           ...formData,
           total_score: totalScore,
+          user_id:userId
         }),
       });
 

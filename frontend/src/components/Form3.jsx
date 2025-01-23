@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Form3.css'; // Make sure this points to your CSS file
 
 const Form3 = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      navigate('/login', { state: { returnUrl: '/form3' } });
+    }
+  }, [navigate]);
   const [formData, setFormData] = useState({
     question1: '',
     question2: '',
@@ -18,7 +25,9 @@ const Form3 = () => {
   const [totalScore, setTotalScore] = useState(0);
   const [formSubmitted, setFormSubmitted] = useState(false); // State to handle form submission
   const [prediction, setPrediction] = useState(''); // To display prediction (if any)
-  const navigate = useNavigate();
+ 
+
+  const userId = localStorage.getItem("userId");
 
   const handleScoreChange = (event) => {
     const { name, value } = event.target;
@@ -63,6 +72,7 @@ const Form3 = () => {
         body: JSON.stringify({
           ...formData,
           total_score: totalScore,
+          user_id:userId
         }),
       });
 

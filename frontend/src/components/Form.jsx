@@ -1,4 +1,4 @@
-import React, { useState , } from "react";
+import React, { useState ,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import './Form.css';
@@ -6,7 +6,18 @@ import './Form.css';
 const Form = () => {
 
   const navigate = useNavigate();
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      navigate('/login', { state: { returnUrl: '/form' } });
+    }
+  }, [navigate]);
   const handleNext = () => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      navigate('/login', { state: { returnUrl: '/form2' } });
+      return;
+    }
     // Navigate to the next form (Form2)
     navigate("/form2");
   };
@@ -28,6 +39,7 @@ const Form = () => {
   const [prediction, setPrediction] = useState(null);
   const [dietScore, setDietScore] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const userId = localStorage.getItem("userId");
 
   const foodCategories = {
     "Sour Foods": [
@@ -93,6 +105,7 @@ const Form = () => {
     const data = {
       ...responses,
       family_score: totalScore,
+      userId,
     };
 
     try {
@@ -121,7 +134,8 @@ const Form = () => {
     incompatible_combinations: responses.incompatible_combinations.map((food) => ({ food, days: "1-3" })),
     food_habits: responses.food_habits.map((habit) => ({ habit, days: "1-3" })),
     oily_foods: responses.oily_foods.map((food) => ({ food, days: "1-3" })),
-    meals_before_digestion: responses.meals_before_digestion, // Directly add as string
+    meals_before_digestion: responses.meals_before_digestion,
+    userId, // Directly add as string
   };
 
   try {

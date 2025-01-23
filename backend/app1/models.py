@@ -1,17 +1,63 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class UploadedImage(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
     image = models.ImageField(upload_to='uploads/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
     prediction = models.CharField(max_length=255, null=True, blank=True)
     confidence = models.FloatField(null=True, blank=True)
+    wood_lamp=models.ImageField(upload_to='uploads/',null=True)
+    heatmap=models.ImageField(upload_to='uploads/',null=True)
+    grayscale=models.ImageField(upload_to='uploads/',null=True)
+   
+
+
+
+
 
     def __str__(self):
-        return f"Image {self.id}: {self.image.name}"
+        return f"Image {self.id}: {self.image.name} "
+    
+from django.core.validators import MinValueValidator, MaxValueValidator
+
+class Patient(models.Model):
+    GENDER_CHOICES = [
+        ('male', 'Male'),
+        ('female', 'Female'),
+        ('other', 'Other'),
+    ]
+    
+    user_d = models.ForeignKey(User, on_delete=models.CASCADE, related_name='patients')
+    name = models.CharField(max_length=100)
+    age = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(150)]
+    )
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
+    email = models.EmailField()
+    #phone = models.CharField(max_length=15, blank=True, null=True)
+    assessment_date = models.DateField(auto_now_add=True)
+   
+    report_path = models.CharField(max_length=255, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    #updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+     
+
+    def __str__(self):
+        return f"{self.name} {self.user_d.get_full_name()}"
+    
+
+from django.db import models
 
 
 
 class FamilyHistory(models.Model):
+    
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
     family_history_skin_disorders = models.IntegerField()
     family_history_depigmentation = models.IntegerField()
     personal_history_autoimmune = models.IntegerField()
@@ -32,6 +78,7 @@ class DietAssessment(models.Model):
     #user = models.ForeignKey(User, on_delete=models.CASCADE)
     
     # Food items with days consumed
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)  
     sour_foods = models.JSONField(default=list)  # List of dicts with 'name' and 'days'
     salty_foods = models.JSONField(default=list)
     processed_foods = models.JSONField(default=list)
@@ -90,6 +137,7 @@ class DietAssessment(models.Model):
         return f"Deit Assessment - Score: {self.diet_score}" 
     
 class LifestyleAssessment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
     suppress_urges = models.IntegerField(default=0)
     heavy_exercise = models.IntegerField(default=0)
     sleep_after_meal = models.IntegerField(default=0)
@@ -123,6 +171,7 @@ class LifestyleAssessment(models.Model):
     
 
 class PsychologicalAssessment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
     stress_anxiety = models.IntegerField(default=0)          # question1
     grief_sadness = models.IntegerField(default=0)          # question2
     anger_frustration = models.IntegerField(default=0)      # question3
@@ -159,6 +208,7 @@ class PsychologicalAssessment(models.Model):
 
 
 class VitiligoAssessment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
     # Fields for the answers to each question (same as in the form you provided)
     question1 = models.IntegerField(default=0)  # Question 1: Do you have any white patches on your skin?
     question2 = models.IntegerField(default=0)  # Question 2: What is the shape of the white patches?
@@ -194,6 +244,7 @@ class VitiligoAssessment(models.Model):
 
 class EnvironmentalAssessment(models.Model):
     # Question 1: Are you exposed to chemicals or industrial pollutants at work?
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
     chemical_exposure = models.IntegerField(default=0)  # Question 1
     
     # Question 2: Do you live or work in a highly polluted area?
@@ -226,3 +277,39 @@ class EnvironmentalAssessment(models.Model):
         return f"Environmental Assessment - Score: {self.total_score}"
     
     
+from django.db import models
+
+class VitiligoQuestionnaire(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
+    # Face spots (stored as JSON array of selected options)
+    face_spots = models.JSONField(default=list, blank=True)
+    
+    # Hand/Feet spots
+    hand_feet_spots = models.JSONField(default=list, blank=True)
+    
+    # Arms/Legs spots
+    arms_legs_spots = models.JSONField(default=list, blank=True)
+    
+    # Depigmentation status
+    depigmentation = models.JSONField(default=list, blank=True)
+    
+    # Timestamp for when the questionnaire was submitted
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"Questionnaire {self.id} submitted at {self.created_at}"
+    
+
+from django.db import models
+from django.contrib.auth.models import User
+
+    
+
+from django.db import models
+
+class ContactSubmission(models.Model):
+    user=models.ForeignKey(User, on_delete=models.CASCADE, related_name='contactuser',null=True)
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)

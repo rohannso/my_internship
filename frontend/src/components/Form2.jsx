@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Select from 'react-select';
+import { useNavigate } from 'react-router-dom';
 
 const DietAssessment = () => {
-  const [selectedOptions, setSelectedOptions] = useState({
+  const navigate = useNavigate();
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      navigate('/login', { state: { returnUrl: '/form2' } });
+    }
+  }, [navigate]);
+   const [selectedOptions, setSelectedOptions] = useState({
     sourFoods: [],
     saltyFoods: [],
     processedOrFriedFoods: [],
@@ -16,6 +24,7 @@ const DietAssessment = () => {
   const [submitStatus, setSubmitStatus] = useState({ message: '', error: false });
   const [isLoading, setIsLoading] = useState(false);
   const [daysCount, setDaysCount] = useState(null);
+  const userId = localStorage.getItem("userId");
 
   const categories = {
     sourFoods: [
@@ -147,9 +156,11 @@ const DietAssessment = () => {
       incompatible_combinations: formatCategory(selectedOptions.incompatibleFoodCombinations),
       food_habits: formatCategory(selectedOptions.foodHabits),
       oily_foods: formatCategory(selectedOptions.oilyFoods),
-      meals_before_digestion: mealsBeforeDigestion ? "Yes" : "No" // Changed from boolean to "Yes"/"No"
+      meals_before_digestion: mealsBeforeDigestion ? "Yes" : "No" ,// Changed from boolean to "Yes"/"No"
+      user_id:userId
     };
   };
+  
 
   const handleSubmit = async () => {
     setIsLoading(true);
@@ -180,6 +191,7 @@ const DietAssessment = () => {
         message: `Assessment created successfully! Diet Score: ${data.diet_score}`,
         error: false
       });
+      navigate('/form3');
     } catch (error) {
       setSubmitStatus({
         message: error.message,
@@ -267,7 +279,11 @@ const DietAssessment = () => {
         </div>
       )}
     </div>
-  );
+
+
+
+
+);
 };
 
 export default DietAssessment;

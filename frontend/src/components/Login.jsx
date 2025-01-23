@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './Login.css'; // Add your own styles for the login form
 import { useNavigate } from 'react-router-dom';
+import './Login.css'; // Add your own styles for the login form
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false); // Loading state
+  const [credentials, setCredentials] = useState(null); // For storing login credentials
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
+      // Make a POST request to the backend for login
       const response = await axios.post('http://localhost:8000/api/login/', {
         email: email,
         password: password,
@@ -21,7 +23,13 @@ const Login = () => {
 
       if (response.status === 200) {
         console.log('Login successful');
-        navigate('/dashboard'); // Redirect after login
+        console.log('User ID:', response.data.userId)
+        localStorage.setItem('userId', response.data.userId);
+        localStorage.setItem('email', email);
+        // Save credentials and userId to localStorage
+        localStorage.setItem('authCredentials', btoa(`${email}:${password}`));
+        
+        navigate('/'); // Redirect to the homepage or dashboard
       }
     } catch (error) {
       console.error('Login failed:', error.response?.data);
@@ -32,12 +40,12 @@ const Login = () => {
   };
 
   const handleCreateAccount = () => {
-    navigate('/register');
+    navigate('/register'); // Navigate to the register page
   };
 
   return (
     <div>
-      <div className='title'>Login Page</div>
+      <div className="title">Login Page</div>
       <div className="login-container">
         <div className="login-modal">
           <h2>Login</h2>

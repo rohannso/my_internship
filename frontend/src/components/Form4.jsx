@@ -3,6 +3,8 @@ import './Form4.css'; // Ensure this is the path to your CSS file
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Ensure axios is installed and imported
 
+
+const userId = localStorage.getItem("userId");
 const Form4 = () => {
   const [formData, setFormData] = useState({
     question1: '',
@@ -14,11 +16,14 @@ const Form4 = () => {
     question7: '',
     question8: '',
     question9: '',
-    question10: ''
+    question10: '',
+    user_id:userId
+
   });
   const [formSubmitted, setFormSubmitted] = useState(false); // Track if the form is submitted
   const [finalScore, setFinalScore] = useState(null); // To hold the final score from the backend
   const navigate = useNavigate();
+
 
   // Function to handle changes in form inputs
   const handleInputChange = (event) => {

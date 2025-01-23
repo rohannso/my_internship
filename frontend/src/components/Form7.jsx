@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Form7.css';
 const Form7 = () => {
@@ -14,6 +14,13 @@ const Form7 = () => {
   });
   const [score, setScore] = useState(0);
   const navigate = useNavigate();
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      navigate('/login', { state: { returnUrl: '/form7' } });
+    }
+  }, [navigate]);
+  const userId = localStorage.getItem("userId");
 
   const handleScoreChange = (event, value) => {
     const { name } = event.target;
@@ -22,6 +29,7 @@ const Form7 = () => {
       ...prev,
       [name]: value
     }));
+
 
     // Update total score
     setScore((prevScore) => {
@@ -48,7 +56,8 @@ const Form7 = () => {
         },
         body: JSON.stringify({
           ...formData,
-          total_score: score
+          total_score: score,
+          user_id:userId
         })
       });
 
