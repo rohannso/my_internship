@@ -18,9 +18,7 @@ const Home = () => {
 
   return (
     <div className="container">
-      <button className="login-button" onClick={handleLoginClick}>
-        Login
-      </button>
+
       <div className="header-rectangle">
         <h1 className="title">Vitiligo Detection</h1>
         <div className="content-container">

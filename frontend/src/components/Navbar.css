@@ -1,37 +1,69 @@
-/* Navbar.css */
+/* Basic reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .navbar {
-    background-color: #333;  /* Dark background */
-    padding: 10px;  /* Add some padding */
-    position: fixed;  /* Make the navbar fixed at the top */
-    width: 50%;  /* Ensure it takes the full width */
-    top: 0px;  /* Position it at the top */
-    z-index: 1000;  /* Make sure it stays on top of other content */
-    margin-left:100px;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #333;
+  padding: 15px 0;
+  z-index: 1000; /* Ensure it's above other content */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.navbar li {
+  font-size: 18px;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease;
+}
+
+.navbar a:hover {
+  background-color: grey; /* Hover effect */
+  border-radius: 5px;
+}
+
+.navbar a:active {
+  background-color: grey;
+}
+
+.navbar .logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  text-transform: uppercase;
+  text-align: center;
+  margin-right: auto;
+}
+
+@media (max-width: 768px) {
   .navbar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    justify-content: center;  /* Center the items */
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
   }
-  
-  .navbar ul li {
-    margin: 0 20px;  /* Add some space between items */
+
+  .navbar a {
+    padding: 10px;
+    width: 100%;
+    text-align: left;
   }
-  
-  .navbar ul li a {
-    color: white;  /* Make text white */
-    text-decoration: none;  /* Remove underline */
-    font-size: 18px;
-  }
-  
-  .navbar ul li a:hover {
-    color: #4CAF50;  /* Change color when hovered */
-  }
-  
-  .container {
-    padding-top: 60px;  /* Space for the fixed navbar */
-  }
-  
+}

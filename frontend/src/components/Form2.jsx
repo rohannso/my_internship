@@ -1,8 +1,9 @@
 import React, { useState,useEffect } from 'react';
 import Select from 'react-select';
 import { useNavigate } from 'react-router-dom';
+import './Form2.css'
 
-const DietAssessment = () => {
+const Form2 = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const userId = localStorage.getItem("userId");
@@ -10,7 +11,7 @@ const DietAssessment = () => {
       navigate('/login', { state: { returnUrl: '/form2' } });
     }
   }, [navigate]);
-   const [selectedOptions, setSelectedOptions] = useState({
+  const [selectedOptions, setSelectedOptions] = useState({
     sourFoods: [],
     saltyFoods: [],
     processedOrFriedFoods: [],
@@ -156,11 +157,10 @@ const DietAssessment = () => {
       incompatible_combinations: formatCategory(selectedOptions.incompatibleFoodCombinations),
       food_habits: formatCategory(selectedOptions.foodHabits),
       oily_foods: formatCategory(selectedOptions.oilyFoods),
-      meals_before_digestion: mealsBeforeDigestion ? "Yes" : "No" ,// Changed from boolean to "Yes"/"No"
-      user_id:userId
+      meals_before_digestion: mealsBeforeDigestion ? "Yes" : "No",
+      user_id:userId// Changed from boolean to "Yes"/"No"
     };
   };
-  
 
   const handleSubmit = async () => {
     setIsLoading(true);
@@ -279,11 +279,7 @@ const DietAssessment = () => {
         </div>
       )}
     </div>
-
-
-
-
-);
+  );
 };
 
-export default DietAssessment;
+export default Form2;
