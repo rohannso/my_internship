@@ -76,7 +76,7 @@ def predict_image(image_path):
 
 # Load your trained model
 from joblib import load
-path_svm = r'\backend\app1\best.pkl'
+path_svm = os.path.join(settings.BASE_DIR, 'app1','best.pkl')
 if os.path.exists(path_svm):
     svc_model = load(path_svm)
 else:
