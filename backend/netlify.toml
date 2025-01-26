@@ -1,0 +1,6 @@
+[build]
+  functions = "backend/functions"
+  publish = "frontend/build"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
