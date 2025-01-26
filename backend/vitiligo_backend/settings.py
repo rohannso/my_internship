@@ -58,6 +58,7 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Update this to match your React port
     "http://127.0.0.1:5175",
+    "vitiligo-api.onrender.com"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
