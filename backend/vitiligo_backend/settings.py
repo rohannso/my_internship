@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-$^sabw$nywf_tox*t0b7b@l%)i8d1t4qskls!x(taxx-6cy)=w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['vitiligo-api.onrender.com']
 
 
 # Application definition
@@ -58,7 +58,6 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Update this to match your React port
     "http://127.0.0.1:5175",
-    "http://vitiligo-api.onrender.com"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
