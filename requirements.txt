@@ -8,3 +8,6 @@ gunicorn==20.1.0
 tensorflow
 Pillow
 fpdf
+setuptools
+wheel
+joblib
