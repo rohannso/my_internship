@@ -11,3 +11,4 @@ fpdf
 setuptools
 wheel
 joblib
+matplotlib
