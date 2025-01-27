@@ -10,6 +10,8 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/
 import os
 
 from django.core.wsgi import get_wsgi_application
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'vitiligo_backend.settings')
 
